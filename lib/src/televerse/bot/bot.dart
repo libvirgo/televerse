@@ -93,6 +93,7 @@ class Bot<CTX extends Context> {
     APIScheme scheme = APIScheme.https,
     LoggerOptions? loggerOptions,
     Duration? timeout,
+    String? proxy,
   }) {
     final isLocal = baseURL == RawAPI.defaultBase;
     if (isLocal) {
@@ -102,12 +103,14 @@ class Bot<CTX extends Context> {
         scheme: scheme,
         loggerOptions: loggerOptions,
         timeout: timeout,
+        proxy: proxy,
       );
     }
     return RawAPI(
       token,
       loggerOptions: loggerOptions,
       timeout: timeout,
+      proxy: proxy,
     );
   }
 
@@ -153,6 +156,7 @@ class Bot<CTX extends Context> {
     APIScheme scheme = APIScheme.https,
     LoggerOptions? loggerOptions,
     this.timeout,
+    String? proxy,
   })  : isLocal = baseURL != RawAPI.defaultBase,
         fetcher = fetcher ?? LongPolling<CTX>(),
         _api = _constructRawAPI(
@@ -161,6 +165,7 @@ class Bot<CTX extends Context> {
           scheme: scheme,
           loggerOptions: loggerOptions,
           timeout: timeout,
+          proxy: proxy,
         ) {
     // Set the default error handler
     onError(_defaultErrorHandler);

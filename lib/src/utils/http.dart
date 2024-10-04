@@ -6,11 +6,26 @@ class _HttpClient {
   _HttpClient(
     this.loggerOptions, {
     this.timeout,
+    this.proxy,
   }) {
     if (loggerOptions != null) {
       _dio.interceptors.add(
         loggerOptions!.interceptor,
       );
+    }
+    if (proxy != null) {
+      _dio.httpClientAdapter = IOHttpClientAdapter()
+        ..createHttpClient = () {
+          HttpClient client = HttpClient();
+          // Config the client.
+          client.findProxy = (uri) {
+            // Forward all request to proxy "localhost:8888".
+            return 'PROXY $proxy';
+          };
+          // You can also create a new HttpClient for Dio instead of returning,
+          // but a client must being returned here.
+          return client;
+        };
     }
   }
 
@@ -22,6 +37,7 @@ class _HttpClient {
 
   /// Timeout for the requests
   final Duration? timeout;
+  final String? proxy;
 
   /// Returns the timeout duration for the given [uri]. The [timeout] will not be used for `getUpdates` requests.
   Duration? _timeoutDuration(Uri uri) {

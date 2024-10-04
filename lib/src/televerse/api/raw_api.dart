@@ -6,6 +6,7 @@ class RawAPI {
   ///
   /// When the timeout is reached, the API request will be cancelled and the client will throw an exception.
   final Duration? timeout;
+  final String? proxy;
 
   /// API Scheme
   final APIScheme _scheme;
@@ -28,10 +29,12 @@ class RawAPI {
   static _HttpClient _initializeHttpClient({
     LoggerOptions? loggerOptions,
     Duration? timeout,
+    String? proxy,
   }) {
     return _HttpClient(
       loggerOptions,
       timeout: timeout,
+      proxy: proxy,
     );
   }
 
@@ -54,12 +57,14 @@ class RawAPI {
     APIScheme? scheme,
     LoggerOptions? loggerOptions,
     this.timeout,
+    this.proxy,
   })  : _baseUrl = baseUrl ?? defaultBase,
         _isLocal = baseUrl != defaultBase,
         _scheme = scheme ?? APIScheme.https,
         _httpClient = _initializeHttpClient(
           loggerOptions: loggerOptions,
           timeout: timeout,
+          proxy: proxy,
         );
 
   /// `RawAPI` gives you access to all methods of Telegram Bot API.
@@ -73,6 +78,7 @@ class RawAPI {
   /// If you're looking to create instance that use local bot api server support, you can use the `RawAPI.local` constructor.
   factory RawAPI(
     String token, {
+    String? proxy,
     LoggerOptions? loggerOptions,
     Duration? timeout,
   }) {
@@ -80,6 +86,7 @@ class RawAPI {
       token,
       loggerOptions: loggerOptions,
       timeout: timeout,
+      proxy: proxy,
     );
   }
 
@@ -92,6 +99,7 @@ class RawAPI {
     APIScheme scheme = APIScheme.http,
     LoggerOptions? loggerOptions,
     Duration? timeout,
+    String? proxy,
   }) {
     return RawAPI._(
       token,
@@ -99,6 +107,7 @@ class RawAPI {
       scheme: scheme,
       loggerOptions: loggerOptions,
       timeout: timeout,
+      proxy: proxy,
     );
   }
 
